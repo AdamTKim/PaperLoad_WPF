@@ -1,0 +1,17 @@
+C:\Users\Admin\source\repos\PaperLoad_WPF\bin\Debug\netcoreapp3.1\PaperLoad_WPF.exe
+C:\Users\Admin\source\repos\PaperLoad_WPF\bin\Debug\netcoreapp3.1\PaperLoad_WPF.deps.json
+C:\Users\Admin\source\repos\PaperLoad_WPF\bin\Debug\netcoreapp3.1\PaperLoad_WPF.runtimeconfig.json
+C:\Users\Admin\source\repos\PaperLoad_WPF\bin\Debug\netcoreapp3.1\PaperLoad_WPF.runtimeconfig.dev.json
+C:\Users\Admin\source\repos\PaperLoad_WPF\bin\Debug\netcoreapp3.1\PaperLoad_WPF.dll
+C:\Users\Admin\source\repos\PaperLoad_WPF\bin\Debug\netcoreapp3.1\PaperLoad_WPF.pdb
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF.csprojAssemblyReference.cache
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\MainWindow.g.cs
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\App.g.cs
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF_MarkupCompile.cache
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\MainWindow.baml
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF.g.resources
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF.AssemblyInfoInputs.cache
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF.AssemblyInfo.cs
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF.dll
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF.pdb
+C:\Users\Admin\source\repos\PaperLoad_WPF\obj\Debug\netcoreapp3.1\PaperLoad_WPF.genruntimeconfig.cache
