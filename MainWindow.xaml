@@ -1,0 +1,366 @@
+﻿<Window x:Class="PaperLoad_WPF.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:sys="clr-namespace:System;assembly=mscorlib"
+		mc:Ignorable="d"
+		Title="Live Monitor Tool" Width="1920" Height="1080" MinWidth="1600" MinHeight="750" MaxWidth="3840" MaxHeight="2160" WindowState="Maximized" WindowStartupLocation="CenterScreen">
+	<Grid x:Name="mainGrid" Background="#DBDBDB">
+		<!--GENERAL ELEMENTS-->
+		<Image Margin="14,22,0,0" Source="assets/P5CTS_Icon.png" Stretch="Uniform" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150"/>
+		<Button x:Name="openFile_button" Content="Open File" Margin="462,170,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="75" Height="25" FontSize="16" 
+					Foreground="GhostWhite" IsTabStop="False" Click="OpenFile_Click">
+			<Button.Style>
+				<Style TargetType="{x:Type Button}">
+					<Setter Property="Background" Value="#FF184584"/>
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type Button}">
+								<Border Background="{TemplateBinding Background}">
+									<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+								</Border>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+					<Style.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Background" Value="Firebrick"/>
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Style>
+		</Button>
+		<!--STATUS BAR ELEMENTS-->
+		<StatusBar x:Name="mainWindowStatusBar" Margin="0,0,0,0" Height="20" VerticalAlignment="Bottom" Background="#454544"/>
+		<Label x:Name="rowCountHAA_label" Content="0" Margin="0,0,238,-3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="GhostWhite" FontSize="14"/>
+		<Label x:Name="rowCountLAA_label" Content="0" Margin="0,0,135,-3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="GhostWhite" FontSize="14"/>
+		<Label x:Name="rowCount_label" Content="0" Margin="0,0,40,-3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="GhostWhite" FontSize="14"/>
+		<Label Content=": HAA" Margin="0,0,200,-3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="GhostWhite" FontSize="14"/>
+		<Label Content=": LAA" Margin="0,0,100,-3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="GhostWhite" FontSize="14"/>
+		<Label Content=": Total" Margin="0,0,0,-3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Foreground="GhostWhite" FontSize="14"/>
+		<!--SORTIE ELEMENTS-->
+		<Grid x:Name="sortieGrid" KeyboardNavigation.TabNavigation="Continue">
+			<!--SORTIE LABELS-->
+			<Label Content="Sortie Mission ID" Margin="0,15,796,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="174" FontSize="22"/>
+			<Label Content="-" Margin="0,45,872,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" FontSize="22"/>
+			<Label Content="-" Margin="0,45,742,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" FontSize="22"/>
+			<Label Content="Project Number" Margin="0,110,807,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="163" FontSize="22"/>
+			<Label Content="Sortie Date" Margin="0,15,557,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="118" FontSize="22"/>
+			<Label Content="# of CDs" Margin="0,110,515,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="160" FontSize="22"/>
+			<Label Content="Range Start Time" Margin="0,15,305,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="175" FontSize="22"/>
+			<Label Content="-" Margin="0,15,281,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" FontSize="22"/>
+			<Label Content="-" Margin="0,45,281,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="20" FontSize="22"/>
+			<Label Content="Range End Time" Margin="0,15,113,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="167" FontSize="22"/>
+			<Label Content="Recorded Stations" Margin="0,110,330,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="185" FontSize="22"/>
+			<!--SORTIE TEXTBOXES-->
+			<TextBox x:Name="sortieMissionIDJulian_input" Margin="0,50,891,0" VerticalAlignment="Top" HorizontalAlignment="Right" TextWrapping="Wrap" Height="35" Width="75" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="5" IsTabStop="False" IsReadOnly="True"/>
+			<TextBox x:Name="sortieMissionIDTime_input" Margin="0,50,760,0" VerticalAlignment="Top" HorizontalAlignment="Right" TextWrapping="Wrap" Height="35" Width="115" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="7" TabIndex="1"/>
+			<TextBox x:Name="sortieMissionIDSub_input" Margin="0,50,716,0" VerticalAlignment="Top" HorizontalAlignment="Right" TextWrapping="Wrap" Height="35" Width="30" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="2" IsTabStop="False" PreviewTextInput="CheckIfInt" Loaded="SortieMissionIDSub_Loaded"/>
+			<TextBox x:Name="sortieStartTime_input" Margin="0,50,306,0" VerticalAlignment="Top" HorizontalAlignment="Right" TextWrapping="Wrap" Height="35" Width="55" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="4" TabIndex="2" PreviewTextInput="CheckIfInt"/>
+			<TextBox x:Name="sortieEndTime_input" Margin="0,50,221,0" VerticalAlignment="Top" HorizontalAlignment="Right" TextWrapping="Wrap" Height="35" Width="55" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="4" TabIndex="3" PreviewTextInput="CheckIfInt"/>
+			<TextBox x:Name="sortieProject_input" Margin="0,145,791,0" VerticalAlignment="Top" HorizontalAlignment="Right" TextWrapping="Wrap" Height="35" Width="175" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="8" TabIndex="4"/>
+			<TextBox x:Name="sortieNumCD_input" Margin="0,145,641,0" VerticalAlignment="Top" HorizontalAlignment="Right" TextWrapping="Wrap" Height="35" Width="30" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="2" TabIndex="5" PreviewTextInput="CheckIfInt"/>
+			<!--SORTIE RADIOBUTTONS-->
+			<RadioButton x:Name="sortieDash1_input" Content="(-1)" Margin="0,120,280,0" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="18" VerticalContentAlignment="Center" 
+						 IsTabStop="False" IsChecked="True"/>
+			<RadioButton x:Name="sortieDash2_input" Content="(-2)" Margin="0,120,230,0" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="18" VerticalContentAlignment="Center" 
+						 IsTabStop="False" IsChecked="False"/>
+			<RadioButton x:Name="sortieDash3_input" Content="(-3)" Margin="0,120,180,0" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="18" VerticalContentAlignment="Center" 
+						 IsTabStop="False" IsChecked="False"/>
+			<!--SORTIE CHECKBOXES-->
+			<CheckBox x:Name="sortieModify_input" Content="Check to Modify Sortie Data" Margin="545,180,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14" 
+					  VerticalContentAlignment="Center" IsTabStop="False" Visibility="Hidden" Click="SortieModify_Click"/>
+			<CheckBox x:Name="sortieStationM_input" Content="M" Margin="0,148,470,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="40" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="6"/>
+			<CheckBox x:Name="sortieStation2_input" Content="2" Margin="0,148,420,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="7"/>
+			<CheckBox x:Name="sortieStation3_input" Content="3" Margin="0,148,370,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="8"/>
+			<CheckBox x:Name="sortieStation4_input" Content="4" Margin="0,148,320,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="9"/>
+			<CheckBox x:Name="sortieStation5_input" Content="5" Margin="0,148,270,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="10"/>
+			<CheckBox x:Name="sortieStation6_input" Content="6" Margin="0,148,220,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="11"/>
+			<CheckBox x:Name="sortieStation7_input" Content="7" Margin="0,148,170,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="12"/>
+			<CheckBox x:Name="sortieStation8_input" Content="8" Margin="0,148,120,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="13"/>
+			<CheckBox x:Name="sortieStation9_input" Content="9" Margin="0,148,70,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="32" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="14"/>
+			<CheckBox x:Name="sortieStation10_input" Content="10" Margin="0,148,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="44" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="15"/>
+			<!--SORTIE DATEPICKER-->
+			<DatePicker x:Name="sortieDate_input" Margin="0,50,521,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="35" Width="150" FontSize="22" VerticalContentAlignment="Center" 
+						KeyboardNavigation.TabNavigation="None" SelectedDate="{x:Static sys:DateTime.Now}" Loaded="SortieDate_Loaded" SelectedDateChanged="SortieDate_SelectedDateChanged"/>
+			<!--SORTIE BUTTONS-->
+			<Button x:Name="sortieRAMPODExport_button" Content="Export RAMPOD" Margin="0,0,10,30" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="75" Width="155" FontSize="20" 
+					Foreground="GhostWhite" IsTabStop="False" Click="SortieRAMPODExport_Click">
+				<Button.Style>
+					<Style TargetType="{x:Type Button}">
+						<Setter Property="Background" Value="#FF184584"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border Background="{TemplateBinding Background}">
+										<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Style.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter Property="Background" Value="Firebrick"/>
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Button.Style>
+			</Button>
+			<!--SORTIE DATAGRID-->
+			<DataGrid x:Name="sortieDG" Margin="0,200,10,120" HorizontalAlignment="Right" Width="255" AutoGenerateColumns="False" CanUserResizeColumns="True" CanUserReorderColumns="False" 
+					  CanUserAddRows="False" CanUserResizeRows="False" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" Background="#E6E6E6" HeadersVisibility="Column" 
+					  KeyboardNavigation.TabNavigation="None" LostFocus="DataGrid_LostFocus" MouseDoubleClick="SortieDataGrid_MouseDoubleClick">
+				<DataGrid.Resources>
+					<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFFE80"/>
+				</DataGrid.Resources>
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header=" Generate Half Sheet" Click="SortieDataGridContextGenerate_Click"/>
+						<MenuItem Header="------------------------"/>
+						<MenuItem Header="        Add Notes" Click="SortieDataGridContextAddNotes_Click"/>
+						<MenuItem Header="------------------------"/>
+						<MenuItem Header="   Add Auditoriums" Click="SortieDataGridContextAddAud_Click"/>
+						<MenuItem Header="------------------------"/>
+						<MenuItem Header="      Delete Sortie" Click="SortieDataGridContextDelete_Click"/>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
+				<DataGrid.ColumnHeaderStyle>
+					<Style TargetType="{x:Type DataGridColumnHeader}">
+						<Setter Property="Height" Value="22"/>
+						<Setter Property="Foreground" Value="#FAF7FC"/>
+						<Setter Property="Background" Value="#454544"/>
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</DataGrid.ColumnHeaderStyle>
+				<DataGrid.RowStyle>
+					<Style TargetType="{x:Type DataGridRow}">
+						<Setter Property="Height" Value="25"/>
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Sortie_IsMissionSubmitted}" Value="False">
+								<Setter Property="Visibility" Value="Collapsed"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</DataGrid.RowStyle>
+				<DataGrid.CellStyle>
+					<Style TargetType="{x:Type DataGridCell}">
+						<Setter Property="Foreground" Value="Black"/>
+						<Setter Property="TextBlock.TextAlignment" Value="Center"/>
+					</Style>
+				</DataGrid.CellStyle>
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Sortie Mission ID" Binding="{Binding Sortie_MissionID, UpdateSourceTrigger=PropertyChanged}" Width="120"/>
+					<DataGridTextColumn Header="HAA" Binding="{Binding Sortie_HAACount, UpdateSourceTrigger=PropertyChanged}" Width="*">
+						<DataGridTextColumn.CellStyle>
+							<Style TargetType="{x:Type DataGridCell}">
+								<Setter Property="Foreground" Value="Black"/>
+								<Setter Property="Background" Value="#FFBB80"/>
+								<Setter Property="BorderBrush" Value="#FFBB80"/>
+								<Setter Property="TextBlock.TextAlignment" Value="Center"/>
+							</Style>
+						</DataGridTextColumn.CellStyle>
+					</DataGridTextColumn>
+					<DataGridTextColumn Header="LAA" Binding="{Binding Sortie_LAACount, UpdateSourceTrigger=PropertyChanged}" Width="*">
+						<DataGridTextColumn.CellStyle>
+							<Style TargetType="{x:Type DataGridCell}">
+								<Setter Property="Foreground" Value="Black"/>
+								<Setter Property="Background" Value="#8EC3F1"/>
+								<Setter Property="BorderBrush" Value="#8EC3F1"/>
+								<Setter Property="TextBlock.TextAlignment" Value="Center"/>
+							</Style>
+						</DataGridTextColumn.CellStyle>
+					</DataGridTextColumn>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
+		<!--AIRCRAFT ELEMENTS-->
+		<Grid x:Name="aircraftGrid" KeyboardNavigation.TabNavigation="Cycle">
+			<!--AIRCRAFT LABELS-->
+			<Label Content="Aircraft Unit" Margin="10,240,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<Label Content="Aircraft Callsign" Margin="252,240,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<Label Content="Aircraft Type" Margin="10,330,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<Label Content="Aircraft Station" Margin="252,330,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<Label Content="Aircraft Tail Number" Margin="10,420,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<Label Content="Aircraft IFF" Margin="252,420,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<Label Content="Aircraft Pod Serial" Margin="10,510,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<Label Content="Aircraft Track Status" Margin="252,510,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22"/>
+			<!--AIRCRAFT TEXTBOXES-->
+			<TextBox x:Name="aircraftTailNum_input" Margin="14,455,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" Height="35" Width="90" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="4" TabIndex="21"/>
+			<TextBox x:Name="aircraftIFF_input" Margin="256,455,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" Height="35" Width="55" FontSize="22" 
+					 VerticalContentAlignment="Center" MaxLength="4" TabIndex="22" PreviewTextInput="CheckIfInt"/>
+			<!--AIRCRAFT COMBOBOXES-->
+			<ComboBox x:Name="aircraftUnit_input" Margin="14,275,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="35" Width="140" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="17" IsEditable="True" TextBoxBase.TextChanged="SelectAircraftFromUnit_TextChanged" LostFocus="ComboBox_LostFocus" GotKeyboardFocus="ComboBox_GotKeyboardFocus">
+				<ComboBoxItem Content="16 WPS"/>
+				<ComboBoxItem Content="17 WPS"/>
+				<ComboBoxItem Content="6 WPS"/>
+				<ComboBoxItem Content="64 AGRS"/>
+				<ComboBoxItem Content="65 AGRS"/>
+				<ComboBoxItem Content="66 WPS"/>
+				<ComboBoxItem Content="422 TES"/>
+				<ComboBoxItem Content="433 WPS"/>
+				<ComboBoxItem Content="34 WPS"/>
+				<ComboBoxItem Content="26 WPS"/>
+				<ComboBoxItem Content="TOP ACES"/>
+				<ComboBoxItem Content="TDY"/>
+			</ComboBox>
+			<ComboBox x:Name="aircraftCallsign_input" Margin="256,275,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="35" Width="155" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="18" IsEditable="True" TextBoxBase.TextChanged="SelectAircraftFromCallsign_TextChanged" Loaded="ComboBox_Loaded" GotKeyboardFocus="ComboBox_GotKeyboardFocus"/>
+			<ComboBox x:Name="aircraftType_input" Margin="14,365,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="35" Width="140" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="19" IsEditable="True" TextBoxBase.TextChanged="ChangeStationOptions" LostFocus="ComboBox_LostFocus" GotKeyboardFocus="ComboBox_GotKeyboardFocus"/>
+			<ComboBox x:Name="aircraftStation_input" Margin="256,365,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="35" Width="70" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="20" IsEditable="True" LostFocus="ComboBox_LostFocus" GotKeyboardFocus="ComboBox_GotKeyboardFocus"/>
+			<ComboBox x:Name="aircraftPodSerial_input" Margin="14,545,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="35" Width="90" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="23" IsEditable="True" Loaded="ComboBox_Loaded" GotKeyboardFocus="ComboBox_GotKeyboardFocus"/>
+			<ComboBox x:Name="aircraftTrackStatus_input" Margin="256,545,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="35" Width="70" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="24" IsEditable="True" LostFocus="ComboBox_LostFocus" GotKeyboardFocus="ComboBox_GotKeyboardFocus"/>
+			<!--AIRCRAFT CHECKBOXES-->
+			<CheckBox x:Name="aircraftLowAct_input" Content="Low Activity" Margin="14,190,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="22" VerticalContentAlignment="Center" 
+					  TabIndex="16" Click="AircraftInputModeChange_Click"/>
+			<!--AIRCRAFT BUTTONS-->
+			<Button x:Name="aircraftAdd_button" Content="Add Aircraft" Margin="14,0,0,30" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="75" Width="150" FontSize="20" 
+					Foreground="GhostWhite" TabIndex="25" Click="AddAircraft_Click">
+				<Button.Style>
+					<Style TargetType="{x:Type Button}">
+						<Setter Property="Background" Value="#FF184584"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border Background="{TemplateBinding Background}">
+										<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Style.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter Property="Background" Value="Firebrick"/>
+							</Trigger>
+							<Trigger Property="IsKeyboardFocused" Value="True">
+								<Setter Property="Background" Value="Firebrick"/>
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Button.Style>
+			</Button>
+			<Button x:Name="aircraftAddSortie_button" Content="Add Sortie" Margin="298,0,0,30" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="75" Width="150" FontSize="20"
+					Foreground="GhostWhite" IsTabStop="False" Click="AddSortie_Click">
+				<Button.Style>
+					<Style TargetType="{x:Type Button}">
+						<Setter Property="Background" Value="#FF184584"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border Background="{TemplateBinding Background}">
+										<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Style.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter Property="Background" Value="Firebrick"/>
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Button.Style>
+			</Button>
+			<!--AIRCRAFT DATAGRID-->
+			<DataGrid x:Name="aircraftDG" Margin="462,200,280,30" AlternationCount="2" AutoGenerateColumns="False" CanUserResizeColumns="True" CanUserReorderColumns="False" 
+						  CanUserAddRows="False" CanUserResizeRows="False" IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" Background="#E6E6E6" HeadersVisibility="Column" 
+						  KeyboardNavigation.TabNavigation="None" LostFocus="DataGrid_LostFocus" MouseDoubleClick="AircraftDataGrid_MouseDoubleClick">
+				<DataGrid.Resources>
+					<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFFE80"/>
+				</DataGrid.Resources>
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Delete Aircraft" Click="AircraftDataGridContextDelete_Click"/>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
+				<DataGrid.ColumnHeaderStyle>
+					<Style TargetType="{x:Type DataGridColumnHeader}">
+						<Setter Property="Height" Value="22"/>
+						<Setter Property="Foreground" Value="#FAF7FC"/>
+						<Setter Property="Background" Value="#454544"/>
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</DataGrid.ColumnHeaderStyle>
+				<DataGrid.RowStyle>
+					<Style TargetType="{x:Type DataGridRow}">
+						<Setter Property="Height" Value="25"/>
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Aircraft_IsPlayerSubmitted}" Value="True">
+								<Setter Property="Visibility" Value="Collapsed"/>
+							</DataTrigger>
+							<MultiDataTrigger>
+								<MultiDataTrigger.Conditions>
+									<Condition Binding="{Binding Aircraft_IsLowActivity}" Value="False"/>
+									<Condition Binding="{Binding AlternationIndex, RelativeSource={RelativeSource Self}}" Value="0"/>
+								</MultiDataTrigger.Conditions>
+								<Setter Property="Background" Value="#FFBB80"/>
+							</MultiDataTrigger>
+							<MultiDataTrigger>
+								<MultiDataTrigger.Conditions>
+									<Condition Binding="{Binding Aircraft_IsLowActivity}" Value="False"/>
+									<Condition Binding="{Binding AlternationIndex, RelativeSource={RelativeSource Self}}" Value="1"/>
+								</MultiDataTrigger.Conditions>
+								<Setter Property="Background" Value="#FFA04D"/>
+							</MultiDataTrigger>
+							<MultiDataTrigger>
+								<MultiDataTrigger.Conditions>
+									<Condition Binding="{Binding Aircraft_IsLowActivity}" Value="True"/>
+									<Condition Binding="{Binding AlternationIndex, RelativeSource={RelativeSource Self}}" Value="0"/>
+								</MultiDataTrigger.Conditions>
+								<Setter Property="Background" Value="#8EC3F1"/>
+							</MultiDataTrigger>
+							<MultiDataTrigger>
+								<MultiDataTrigger.Conditions>
+									<Condition Binding="{Binding Aircraft_IsLowActivity}" Value="True"/>
+									<Condition Binding="{Binding AlternationIndex, RelativeSource={RelativeSource Self}}" Value="1"/>
+								</MultiDataTrigger.Conditions>
+								<Setter Property="Background" Value="#60AAEB"/>
+							</MultiDataTrigger>
+						</Style.Triggers>
+					</Style>
+				</DataGrid.RowStyle>
+				<DataGrid.CellStyle>
+					<Style TargetType="{x:Type DataGridCell}">
+						<Setter Property="Foreground" Value="Black"/>
+						<Setter Property="TextBlock.TextAlignment" Value="Center"/>
+					</Style>
+				</DataGrid.CellStyle>
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Aircraft Unit" Binding="{Binding Aircraft_Unit, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+					<DataGridTextColumn Header="Aircraft Callsign" Binding="{Binding Aircraft_Callsign, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+					<DataGridTextColumn Header="Aircraft Type" Binding="{Binding Aircraft_Type, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+					<DataGridTextColumn Header="Aircraft Station" Binding="{Binding Aircraft_Station, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+					<DataGridTextColumn Header="Aircraft Tail Number" Binding="{Binding Aircraft_TailNumber, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+					<DataGridTextColumn Header="Aircraft IFF" Binding="{Binding Aircraft_IFF, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+					<DataGridTextColumn Header="Aircraft Pod Serial" Binding="{Binding Aircraft_PodSerialNumber, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+					<DataGridTextColumn Header="Aircraft Track Status" Binding="{Binding Aircraft_TrackStatus, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+				</DataGrid.Columns>
+			</DataGrid>
+		</Grid>
+	</Grid>
+</Window>
